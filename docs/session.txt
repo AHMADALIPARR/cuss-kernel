@@ -1,0 +1,61 @@
+cuss-kernel v0.1  (C11, hand-rolled)
+cpu: i386 protected mode, no paging, no libc
+interrupts on. starting shell.
+
+cuss shell. 'help' for commands.
+cuss> help
+commands:
+  help        this text
+  ver         kernel version
+  clear       clear screen
+  demo <name> assemble+run a built-in demo
+  demos       list built-in demos
+  asm         type assembly, empty line to run
+  regs        dump registers from last run
+cuss> demos
+  hello
+  count
+  fib
+  mem
+  echo
+cuss> ver
+cuss-kernel v0.1, CUSS-1 ISA, built Sep 25 2026
+cuss> demo hello
+assembled 13 words. running...
+CUSS!
+
+[hello] ok (steps=13, r1=0xa)
+cuss> demo count
+assembled 10 words. running...
+0123456789
+
+[count] ok (steps=64, r1=0xa)
+cuss> demo fib
+assembled 42 words. running...
+0
+1
+1
+2
+3
+5
+8
+13
+21
+34
+
+[fib] ok (steps=387, r1=0x37)
+cuss> regs
+r0 =0x00000000 r1 =0x00000037 r2 =0x00000059 r3 =0x00000059
+r4 =0x00000000 r5 =0x0000000a r6 =0x00000001 r7 =0x00000000
+r8 =0x00000000 r9 =0x00000000 r10=0x0000000a r11=0x00000000
+r12=0x00000034 r13=0x00000001 r14=0x00000fa0 r15=0x00000000
+pc=14 steps=387
+cuss> demo mem
+assembled 12 words. running...
+K
+[mem] ok (steps=9, r1=0x4d2)
+cuss> demo echo
+assembled 4 words. running...
+Z
+[echo] ok (steps=4, r1=0x5a)
+cuss> 
