@@ -1,0 +1,70 @@
+; SPDX-License-Identifier: AGPL-3.0-or-later
+;
+; cuss-kernel
+; Copyright (C) 2026 SnapKitty Collective
+;
+; This program is free software: you can redistribute it and/or modify
+; it under the terms of the GNU Affero General Public License as published
+; by the Free Software Foundation, either version 3 of the License, or
+; (at your option) any later version.
+;
+; This program is distributed in the hope that it will be useful,
+; but WITHOUT ANY WARRANTY; without even the implied warranty of
+; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+; GNU Affero General Public License for more details.
+;
+; You should have received a copy of the GNU Affero General Public License
+; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+;
+
+; fib.cuss - print the first 10 fibonacci numbers, one per line
+        movi r10, 10     ; print_uint divisor
+        movi r1, 0       ; a
+        movi r2, 1       ; b
+        movi r4, 10      ; count
+loop:
+        mov r5, r1
+        call print_uint
+        movi r5, 10
+        out r5
+        add r3, r1, r2
+        mov r1, r2
+        mov r2, r3
+        movi r6, 1
+        sub r4, r4, r6
+        jnz r4, loop
+        hlt
+
+; print_uint: r5 = value (clobbers r5-r7,r9,r11-r14; preserves r10)
+print_uint:
+        movi r14, 4000   ; digit stack top (dmem)
+        mov r7, r5
+        jnz r7, pu_loop
+        movi r5, 48      ; value was 0
+        out r5
+        ret
+pu_loop:
+        jz r7, pu_emit
+        div r9, r7, r10
+        mul r11, r9, r10
+        sub r12, r7, r11 ; remainder
+        movi r13, 48
+        add r12, r12, r13
+        stor r12, r14, 0
+        movi r13, 1
+        sub r14, r14, r13
+        mov r7, r9
+        jmp pu_loop
+pu_emit:
+        movi r13, 4000
+        sub r6, r13, r14 ; digit count
+        jz r6, pu_done
+pu_out:
+        movi r13, 1
+        add r14, r14, r13
+        load r12, r14, 0
+        out r12
+        sub r6, r6, r13
+        jnz r6, pu_out
+pu_done:
+        ret

@@ -1,0 +1,6 @@
+# build artifacts
+*.o
+cuss-kernel.elf
+kernel/demos_gen.h
+tests/host/harness
+mojo/cuss_asm
